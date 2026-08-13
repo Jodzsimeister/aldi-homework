@@ -13,9 +13,12 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AlertService {
+
+  private static final String ALERTS_TOPIC = "alerts";
 
   private final AlertRepository alertRepository;
   private final SensorRepository sensorRepository;
@@ -28,24 +31,49 @@ public class AlertService {
     this.kafkaTemplate = kafkaTemplate;
   }
 
-  public Alert saveAlert(AlertDto alertDto) {
-    // TODO: Task 6
-    return null;
+  @Transactional
+  public AlertDto saveAlert(AlertDto alertDto) {
+    Objects.requireNonNull(alertDto, "alertDto cannot be null");
+
+    Sensor sensor = sensorRepository.findById(alertDto.sensorId())
+        .orElseThrow(SensorNotFoundException::new);
+
+    Alert alert = mapAlertDTOToEntity(alertDto, sensor);
+
+    alertRepository.save(alert);
+
+    AlertDto resultDTO = mapAlertEntityToDTO(alert);
+
+    // This can be moved out of the transaction boundary and executed in a transaction synchronization hook, if the
+    // publishing to the alerts topic is not mandatory for the saveAlert use-case.
+    kafkaTemplate.send(ALERTS_TOPIC, resultDTO);
+
+    return resultDTO;
   }
 
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
     Objects.requireNonNull(sensorId, "sensorId cannot be null");
 
     return alertRepository.findFirstBySensorIdOrderByTimestampDesc(sensorId)
-        .map(this::mapDTO)
+        .map(this::mapAlertEntityToDTO)
         .orElseThrow(NoAlertsForSensorException::new);
   }
 
-  private AlertDto mapDTO(Alert alert) {
+  private AlertDto mapAlertEntityToDTO(Alert alert) {
     UUID sensorId = Optional.of(alert)
         .map(Alert::getSensor)
         .map(Sensor::getId)
         .orElseThrow(SensorNotFoundException::new);
     return new AlertDto(sensorId, alert.getMessage(), alert.getTimestamp());
+  }
+
+  private Alert mapAlertDTOToEntity(AlertDto alertDto, Sensor sensor) {
+    Alert alert = new Alert();
+
+    alert.setMessage(alertDto.message());
+    alert.setTimestamp(alertDto.timestamp());
+    alert.setSensor(sensor);
+
+    return alert;
   }
 }
