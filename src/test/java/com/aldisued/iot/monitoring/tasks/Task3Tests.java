@@ -2,6 +2,7 @@ package com.aldisued.iot.monitoring.tasks;
 
 import com.aldisued.iot.monitoring.IntegrationTestBase;
 import com.aldisued.iot.monitoring.dto.SensorReadingDto;
+import com.aldisued.iot.monitoring.exception.SensorNotFoundException;
 import com.aldisued.iot.monitoring.repository.SensorReadingRepository;
 import com.aldisued.iot.monitoring.service.SensorReadingService;
 import java.time.LocalDateTime;
@@ -33,29 +34,31 @@ public class Task3Tests extends IntegrationTestBase {
     sensorReadingRepository.deleteAll();
   }
 
-  @Test
-  public void verifySensorReadingProperties() {
-    var sensorReadingDto = testSennsorReadingDto();
+  @Test()
+  public void verifySensorReadingSaveFailsWhenSensorNotFound() {
+    var sensorReadingDto = testSensorReadingDto(UUID.randomUUID());
 
-    var sensorReadingEntity = sensorReadingService.saveSensorReading(sensorReadingDto);
-
-    Assertions.assertEquals(sensorReadingDto.value(), sensorReadingEntity.getValue());
-    Assertions.assertEquals(sensorReadingDto.timestamp(), sensorReadingEntity.getTimestamp());
+    Assertions.assertThrows(SensorNotFoundException.class,
+            () -> sensorReadingService.saveSensorReading(sensorReadingDto));
   }
 
   @Test
   @Transactional
-  public void verifySensorEntity() {
-    var sensorReadingDto = testSennsorReadingDto();
+  public void verifySensorReadingProperties() {
+    var sensorReadingDto = testSensorReadingDto();
 
-    var sensorReadingEntity = sensorReadingService.saveSensorReading(sensorReadingDto);
+    var savedSensorReading = sensorReadingService.saveSensorReading(sensorReadingDto);
 
-    Assertions.assertEquals(SENSOR_ID, sensorReadingEntity.getSensor().getId());
+    Assertions.assertEquals(sensorReadingDto, savedSensorReading);
   }
 
-  private static @NotNull SensorReadingDto testSennsorReadingDto() {
+  private static @NotNull SensorReadingDto testSensorReadingDto() {
+    return testSensorReadingDto(SENSOR_ID);
+  }
+
+  private static @NotNull SensorReadingDto testSensorReadingDto(UUID sensorId) {
     return new SensorReadingDto(
-        SENSOR_ID,
+        sensorId,
         23.45,
         LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS)
     );
