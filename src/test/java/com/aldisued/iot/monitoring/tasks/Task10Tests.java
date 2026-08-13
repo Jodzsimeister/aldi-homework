@@ -1,6 +1,8 @@
 package com.aldisued.iot.monitoring.tasks;
 
 import com.aldisued.iot.monitoring.service.MeasurementCalculatorService;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -10,6 +12,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class Task10Tests {
+
+  private static final List<Double> LIST_WITH_NULL_VALUES = new ArrayList<>(3);
+
+  static {
+    LIST_WITH_NULL_VALUES.add(5.0);
+    LIST_WITH_NULL_VALUES.add(null);
+    LIST_WITH_NULL_VALUES.add(6.0);
+  }
 
   private final MeasurementCalculatorService measurementCalculatorService
       = new MeasurementCalculatorService();
@@ -63,6 +73,10 @@ public class Task10Tests {
         ),
         Arguments.of(
             Collections.emptyList(),
+            1
+        ),
+        Arguments.of(
+            LIST_WITH_NULL_VALUES,
             1
         )
     );
