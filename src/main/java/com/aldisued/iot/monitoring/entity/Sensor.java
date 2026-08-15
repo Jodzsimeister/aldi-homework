@@ -19,10 +19,12 @@ import java.util.UUID;
 @Table(
     name = "sensors",
     uniqueConstraints = {
-        @UniqueConstraint(name = "sensor_name_unique", columnNames = "name")
+        @UniqueConstraint(name = Sensor.SENSOR_NAME_UNIQUE_CONSTRAINT_NAME, columnNames = "name")
     })
 @Entity
 public class Sensor {
+
+  public static final String SENSOR_NAME_UNIQUE_CONSTRAINT_NAME = "sensor_name_unique";
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

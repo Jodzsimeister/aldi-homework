@@ -6,10 +6,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SensorReadingListener {
+public class SensorReadingKafkaListener {
   private final SensorReadingService sensorReadingService;
 
-  public SensorReadingListener(SensorReadingService sensorReadingService) {
+  public SensorReadingKafkaListener(SensorReadingService sensorReadingService) {
     this.sensorReadingService = sensorReadingService;
   }
 

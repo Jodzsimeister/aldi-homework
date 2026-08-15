@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Matchers;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +27,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,13 +97,18 @@ public class Task6Tests extends IntegrationTestBase {
   public void verifySensorReadingProperties() throws Exception {
     var alertDto = testAlertDto();
 
-    mockMvc.perform(MockMvcRequestBuilders.post(BASE_ENDPOINT)
+    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(BASE_ENDPOINT)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(alertDto)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.sensorId", Matchers.equalTo(SENSOR_ID.toString())))
         .andExpect(jsonPath("$.message", Matchers.equalTo(alertDto.message())))
-        .andExpect(jsonPath("$.timestamp", Matchers.equalTo(alertDto.timestamp().toString())));
+        .andReturn();
+
+    String timestamp = JsonPath.read(result.getResponse().getContentAsString(), "$.timestamp");
+
+    Assertions.assertEquals(alertDto.timestamp().truncatedTo(ChronoUnit.MILLIS),
+        LocalDateTime.parse(timestamp).truncatedTo(ChronoUnit.MILLIS));
   }
 
   @Test
