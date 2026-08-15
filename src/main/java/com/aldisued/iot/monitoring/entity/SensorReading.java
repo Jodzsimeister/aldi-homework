@@ -1,18 +1,20 @@
 package com.aldisued.iot.monitoring.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Table(name = "sensor_readings")
+@Table(
+    name = "sensor_readings"
+    // This composite index could be useful, but this entity seems to be write-heavy, therefore a huge amount of writes
+    // would be slowed due to index update, and a few reads would be fastened via
+    // MeasurementService#getMeasurementValuesBySensorType
+    /*indexes = {
+        @Index(
+            name = "idx_sensor_type_timestamp",
+            columnList = "sensor_type, timestamp"
+        )
+    }*/)
 @Entity
 public class SensorReading {
 

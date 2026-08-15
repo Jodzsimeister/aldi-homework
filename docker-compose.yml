@@ -10,8 +10,16 @@ services:
       POSTGRES_USER: monitoring_user
       POSTGRES_PASSWORD: IOT123!
     ports:
-     - "5432:5432"
+      - "5432:5432"
 
+  iotmonitor:
+    image: iotmonitor:latest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/monitoring
+      SPRING_DATASOURCE_USERNAME: monitoring_user
+      SPRING_DATASOURCE_PASSWORD: IOT123!
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres_data:
