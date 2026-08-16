@@ -11,18 +11,18 @@ import java.util.UUID;
 
 @Component
 public class SensorReadingMapper {
-    public SensorReading mapSensorReadingDTOToEntity(SensorReadingDto sensorReadingDto, Sensor sensor) {
-        return new SensorReading(
-                sensorReadingDto.value(),
-                sensorReadingDto.timestamp(),
-                sensor);
-    }
-
     public SensorReadingDto mapSensorReadingEntityToDTO(SensorReading sensorReading) {
         UUID sensorId = Optional.of(sensorReading)
                 .map(SensorReading::getSensor)
                 .map(Sensor::getId)
                 .orElseThrow(SensorNotFoundException::new);
         return new SensorReadingDto(sensorId, sensorReading.getValue(), sensorReading.getTimestamp());
+    }
+
+    public SensorReading mapSensorReadingDTOToEntity(SensorReadingDto sensorReadingDto, Sensor sensor) {
+        return new SensorReading(
+                sensorReadingDto.value(),
+                sensorReadingDto.timestamp(),
+                sensor);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-@Import(TestcontainersConfiguration.class)
+@Import(PostgresTestcontainerConfiguration.class)
 @ActiveProfiles("docker")
 public class IntegrationTestBase {
 

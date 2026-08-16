@@ -1,7 +1,5 @@
 package com.aldisued.iot.monitoring.tasks;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.aldisued.iot.monitoring.IntegrationTestBase;
 import com.aldisued.iot.monitoring.dto.SensorDto;
 import com.aldisued.iot.monitoring.entity.SensorType;
@@ -13,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class Task4Tests extends IntegrationTestBase {
 

@@ -45,7 +45,7 @@ public class Task9Tests {
   }
 
   @ParameterizedTest
-  @ValueSource(doubles = {-0.1, 1.1, 2.0})
+  @ValueSource(doubles = {Double.NaN, -0.1, 1.1, 2.0})
   public void verifyInvalidDeviationHandling(Double deviation) {
     Assertions.assertThrows(IllegalArgumentException.class,
         () -> measurementCalculatorService.filterByAverageDeviation(Collections.emptyList(),

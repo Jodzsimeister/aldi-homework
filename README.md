@@ -30,3 +30,27 @@ Please complete the assignment **within one week**.
 
 ## 📂 Project Structure (expected)
 
+## 🏗️ Build
+
+You can build the project and execute the unit tests with: 
+
+`mvnw clean package`
+
+You can build the project, and execute the unit **AND** integration tests with:
+
+`mvnw clean verify`
+
+If you would like to build a Eclipse-Temurin JRE21 based docker image you can do it with:
+
+`mvnw clean verify -PbuildDockerImage`
+
+## 🐳 Start local Docker environment
+
+You can create a local docker environment with Docker Compose. Use the following command:
+
+`docker compose up -d`
+
+This will create a postgres container, a kafka container (with initialized topics), and the IoT monitoring app 
+container in a common docker network. The app is accessible via the 8080 port, the database on the 5432 port, and the
+kafka broker is accessible on the 9092 port.
+If the database access and the kafka access from the host is not needed, the port bindings can be removed.

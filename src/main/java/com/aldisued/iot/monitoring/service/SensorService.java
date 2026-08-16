@@ -8,6 +8,7 @@ import com.aldisued.iot.monitoring.repository.SensorRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -23,12 +24,13 @@ public class SensorService {
     this.sensorMapper = sensorMapper;
   }
 
+  @Transactional
   public SensorDto saveSensor(SensorDto sensor) {
       Objects.requireNonNull(sensor, "sensor cannot be null");
 
       try {
           return sensorMapper.mapSensorEntityToDTO(
-              sensorRepository.save(
+              sensorRepository.saveAndFlush(
                   sensorMapper.mapSensorDTOToEntity(sensor)));
       } catch (DataIntegrityViolationException exception) {
           if (exception.getCause() != null
