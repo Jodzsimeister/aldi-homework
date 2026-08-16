@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MeasurementService {
@@ -20,6 +21,7 @@ public class MeasurementService {
     this.sensorReadingRepository = sensorReadingRepository;
   }
 
+  @Transactional(readOnly = true)
   public List<Double> getMeasurementValuesBySensorType(SensorType sensorType, LocalDateTime from,
       LocalDateTime to) {
     Objects.requireNonNull(sensorType, "sensorType must not be null");
@@ -32,6 +34,7 @@ public class MeasurementService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
   public Optional<Double> getAverageTemperature(LocalDateTime from, LocalDateTime to) {
     Objects.requireNonNull(from, "from must not be null");
     Objects.requireNonNull(to, "to must not be null");

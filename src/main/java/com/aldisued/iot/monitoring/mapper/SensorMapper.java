@@ -11,6 +11,6 @@ public class SensorMapper {
     }
 
     public SensorDto mapSensorEntityToDTO(Sensor sensor) {
-        return new SensorDto(sensor.getName(), sensor.getType());
+        return new SensorDto(sensor.getId(), sensor.getName(), sensor.getType());
     }
 }

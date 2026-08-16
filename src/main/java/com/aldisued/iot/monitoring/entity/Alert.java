@@ -2,7 +2,6 @@ package com.aldisued.iot.monitoring.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +25,7 @@ public class Alert {
   @Column(nullable = false)
   private LocalDateTime timestamp;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "sensor_id")
   private Sensor sensor;
 

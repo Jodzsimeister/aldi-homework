@@ -9,7 +9,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @Profile("docker")
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+class PostgresTestcontainerConfiguration {
 
 	@Bean
 	@ServiceConnection

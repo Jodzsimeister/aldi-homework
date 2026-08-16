@@ -28,7 +28,6 @@ public class Task2Tests extends IntegrationTestBase {
   private Sensor temparatureSensor;
   private Sensor humiditySensor;
 
-
   @Autowired
   private SensorRepository sensorRepository;
 

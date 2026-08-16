@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AlertService {
 
-  private static final String ALERTS_TOPIC = "alerts";
+  static final String ALERTS_TOPIC = "alerts";
 
   private final AlertRepository alertRepository;
   private final SensorRepository sensorRepository;
@@ -53,6 +53,7 @@ public class AlertService {
     return resultDTO;
   }
 
+  @Transactional(readOnly = true)
   public AlertDto findLastAlertBySensorId(UUID sensorId) {
     Objects.requireNonNull(sensorId, "sensorId cannot be null");
 
