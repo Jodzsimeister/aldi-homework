@@ -29,9 +29,8 @@ public class SensorService {
       Objects.requireNonNull(sensor, "sensor cannot be null");
 
       try {
-          return sensorMapper.mapSensorEntityToDTO(
-              sensorRepository.saveAndFlush(
-                  sensorMapper.mapSensorDTOToEntity(sensor)));
+          Sensor savedSensor = sensorRepository.saveAndFlush(sensorMapper.mapSensorDTOToEntity(sensor));
+          return sensorMapper.mapSensorEntityToDTO(savedSensor);
       } catch (DataIntegrityViolationException exception) {
           if (exception.getCause() != null
                   && exception.getCause() instanceof ConstraintViolationException constraintViolationException
