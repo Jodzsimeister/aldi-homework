@@ -40,7 +40,7 @@ You can build the project, and execute the unit **AND** integration tests with:
 
 `mvnw clean verify`
 
-If you would like to build a Eclipse-Temurin JRE21 based docker image you can do it with:
+If you would like to build an Eclipse-Temurin JRE21 based docker image you can do it with:
 
 `mvnw clean verify -PbuildDockerImage`
 
